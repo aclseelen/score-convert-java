@@ -3,6 +3,10 @@ package eu.acls.scoreconvert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class NoteConvertTest {
@@ -12,17 +16,63 @@ class NoteConvertTest {
   }
 
   @Test
-  void lilyToTs() {
+  void lilyToTs_String_String() {
     assertEquals("22 6", NoteConvert.lilyToTs("cisis"));
     assertEquals("24 10", NoteConvert.lilyToTs("bes"));
     assertEquals("25 10", NoteConvert.lilyToTs("c'"));
     assertEquals("10 4", NoteConvert.lilyToTs("c,,"));
     assertEquals("29 11", NoteConvert.lilyToTs("a'"));
     assertEquals("25 10 4", NoteConvert.lilyToTs("c'4"));
+    assertEquals("25 10 16", NoteConvert.lilyToTs("c'16"));
     assertEquals("25 10 4 8", NoteConvert.lilyToTs("c'4."));
     assertEquals("25 10 4 8 16", NoteConvert.lilyToTs("c'4.."));
     assertEquals("25 10 4 8 16 32", NoteConvert.lilyToTs("c'4..."));
     assertEquals("100 100 4", NoteConvert.lilyToTs("r4"));
+  }
+
+  @Test
+  void lilyToTs_Lily_Ts_abs() {
+    LilyValue lilyValue = new LilyValue();
+    lilyValue.setLetters("cisis");
+    TsValue tsValue = new TsValue(22, 6);
+    assertEquals(tsValue.toString(), NoteConvert.lilyToTs(lilyValue).toString());
+
+    lilyValue = new LilyValue();
+    lilyValue.setLetters("c");
+    lilyValue.setSpecialChars("'");
+    lilyValue.setNumbers("4");
+    lilyValue.setDots(".");
+    tsValue = new TsValue(25, 10);
+    tsValue.setNoteLenList(Arrays.asList(4, 8));
+    assertEquals(tsValue.toString(), NoteConvert.lilyToTs(lilyValue).toString());
+  }
+
+  @Test
+  void lilyToTs_Lily_Ts_rel() {
+    LilyValue lilyValue = new LilyValue();
+    lilyValue.setLetters("d");
+    lilyValue.setNumbers("16");
+    TsValue tsValue = new TsValue(26, 10);
+    tsValue.setNoteLenList(List.of(16));
+    TsValue reference = new TsValue(25, 10);
+    assertEquals(tsValue.toString(), NoteConvert.lilyToTs(lilyValue, reference).toString());
+
+    lilyValue = new LilyValue();
+    lilyValue.setLetters("g");
+    lilyValue.setNumbers("8");
+    lilyValue.setSpecialChars("'");
+    tsValue = new TsValue(28, 11);
+    tsValue.setNoteLenList(List.of(8));
+    reference = new TsValue(25, 10);
+    assertEquals(tsValue.toString(), NoteConvert.lilyToTs(lilyValue, reference).toString());
+
+    lilyValue = new LilyValue();
+    lilyValue.setLetters("g");
+    lilyValue.setNumbers("8");
+    tsValue = new TsValue(8, 3);
+    tsValue.setNoteLenList(List.of(8));
+    reference = new TsValue(10, 4);
+    assertEquals(tsValue.toString(), NoteConvert.lilyToTs(lilyValue, reference).toString());
   }
 
   @Test

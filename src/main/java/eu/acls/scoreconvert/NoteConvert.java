@@ -27,6 +27,52 @@ public class NoteConvert {
     return tsValue.toString();
   }
 
+  public static TsValue lilyToTs(LilyValue lilyValue) {
+
+    TsValue tsValue = letterToTs(lilyValue.getLetters());
+    processOctaves(tsValue, lilyValue.getSpecialChars());
+    processNoteLength(tsValue, lilyValue.getNumbers(), lilyValue.getDots());
+    return tsValue;
+  }
+
+  public static TsValue lilyToTs(LilyValue lilyValue, TsValue previousTsValue) {
+
+    TsValue tsValue = letterToTs(lilyValue.getLetters());
+    adjustRelative(tsValue, previousTsValue);
+    processOctaves(tsValue, lilyValue.getSpecialChars());
+    processNoteLength(tsValue, lilyValue.getNumbers(), lilyValue.getDots());
+    return tsValue;
+  }
+
+  private static void adjustRelative(TsValue tsValue, TsValue reference) {
+    int sumTs = tsValue.getTone() + tsValue.getSemitone();
+    int sumRef = reference.getTone() + reference.getSemitone();
+
+    int difference = sumRef - sumTs;
+
+    while (Math.abs(difference) >= 4) {
+
+      if (difference > 0) {
+        tsValue.addOctave();
+        difference -= 7;
+      } else {
+        tsValue.subtractOctave();
+        difference += 7;
+      }
+    }
+  }
+
+  static LilyValue stringToLilyValue(String lily) {
+
+    LilyValue lilyValue = new LilyValue();
+    lily = getAllLetters(lily, lilyValue);
+    lily = getAllSpecialChars(lily, lilyValue);
+    lily = getAllDigits(lily, lilyValue);
+    lily = getAllDots(lily, lilyValue);
+
+    return lilyValue;
+  }
+
   private static void processNoteLength(TsValue tsValue, String numbers, String dots) {
 
     if (StringUtils.isBlank(numbers)) {
@@ -68,12 +114,10 @@ public class NoteConvert {
       specialChars = specialChars.substring(1);
       switch (c) {
         case '\'':
-          tsValue.setTone(tsValue.getTone() + 5);
-          tsValue.setSemitone(tsValue.getSemitone() + 2);
+          tsValue.addOctave();
           break;
         case ',':
-          tsValue.setTone(tsValue.getTone() - 5);
-          tsValue.setSemitone(tsValue.getSemitone() - 2);
+          tsValue.subtractOctave();
           break;
         default:
           break loop;
@@ -143,18 +187,7 @@ public class NoteConvert {
     }
   }
 
-  private static LilyValue stringToLilyValue(String lily) {
-
-    LilyValue lilyValue = new LilyValue();
-    lily = getAllLetters(lily, lilyValue);
-    lily = getAllSpecialChars(lily, lilyValue);
-    lily = getAllDigits(lily, lilyValue);
-    getAllDots(lily, lilyValue);
-
-    return lilyValue;
-  }
-
-  private static void getAllDots(String lily, LilyValue lilyValue) {
+  private static String getAllDots(String lily, LilyValue lilyValue) {
 
     while (lily.length() > 0) {
       char c = lily.charAt(0);
@@ -165,6 +198,7 @@ public class NoteConvert {
         break;
       }
     }
+    return lily;
   }
 
   private static String getAllDigits(String lily, LilyValue lilyValue) {

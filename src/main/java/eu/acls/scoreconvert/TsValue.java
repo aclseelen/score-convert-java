@@ -48,4 +48,18 @@ public class TsValue {
   public void setNoteLenList(List<Integer> noteLenList) {
     this.noteLenList = noteLenList;
   }
+
+  public void addOctave() {
+    this.setTone(this.getTone() + 5);
+    this.setSemitone(this.getSemitone() + 2);
+  }
+
+  public void subtractOctave() {
+    this.setTone(this.getTone() - 5);
+    this.setSemitone(this.getSemitone() - 2);
+  }
+
+  public boolean hasNoteLength() {
+    return noteLenList.isEmpty();
+  }
 }
