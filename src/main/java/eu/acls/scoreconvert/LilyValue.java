@@ -3,20 +3,22 @@ package eu.acls.scoreconvert;
 public class LilyValue {
 
   private String letters;
-  private String specialChars;
+  private String octaveIndication;
   private String numbers;
   private String dots;
+  private boolean syncopationTilde;
 
   public LilyValue() {
     letters = "";
-    specialChars = "";
+    octaveIndication = "";
     numbers = "";
     dots = "";
+    syncopationTilde = false;
   }
 
   @Override
   public String toString() {
-    return letters + specialChars + numbers;
+    return letters + octaveIndication + numbers;
   }
 
   public String getLetters() {
@@ -27,12 +29,12 @@ public class LilyValue {
     this.letters = letters;
   }
 
-  public String getSpecialChars() {
-    return specialChars;
+  public String getOctaveIndication() {
+    return octaveIndication;
   }
 
-  public void setSpecialChars(String specialChars) {
-    this.specialChars = specialChars;
+  public void setOctaveIndication(String octaveIndication) {
+    this.octaveIndication = octaveIndication;
   }
 
   public String getNumbers() {
@@ -49,5 +51,13 @@ public class LilyValue {
 
   public void setDots(String dots) {
     this.dots = dots;
+  }
+
+  public boolean hasSyncopationTilde() {
+    return syncopationTilde;
+  }
+
+  public void setSyncopationTilde(boolean syncopationTilde) {
+    this.syncopationTilde = syncopationTilde;
   }
 }

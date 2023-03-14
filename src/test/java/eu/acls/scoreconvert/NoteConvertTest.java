@@ -3,7 +3,6 @@ package eu.acls.scoreconvert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,7 +38,7 @@ class NoteConvertTest {
 
     lilyValue = new LilyValue();
     lilyValue.setLetters("c");
-    lilyValue.setSpecialChars("'");
+    lilyValue.setOctaveIndication("'");
     lilyValue.setNumbers("4");
     lilyValue.setDots(".");
     tsValue = new TsValue(25, 10);
@@ -60,7 +59,7 @@ class NoteConvertTest {
     lilyValue = new LilyValue();
     lilyValue.setLetters("g");
     lilyValue.setNumbers("8");
-    lilyValue.setSpecialChars("'");
+    lilyValue.setOctaveIndication("'");
     tsValue = new TsValue(28, 11);
     tsValue.setNoteLenList(List.of(8));
     reference = new TsValue(25, 10);
@@ -73,6 +72,25 @@ class NoteConvertTest {
     tsValue.setNoteLenList(List.of(8));
     reference = new TsValue(10, 4);
     assertEquals(tsValue.toString(), NoteConvert.lilyToTs(lilyValue, reference).toString());
+  }
+
+  @Test
+  void stringToLily_syncopation() {
+    LilyValue lilyValue;
+
+    lilyValue = NoteConvert.stringToLilyValue("c''4.~");
+    assertEquals("c", lilyValue.getLetters());
+    assertEquals("''", lilyValue.getOctaveIndication());
+    assertEquals("4", lilyValue.getNumbers());
+    assertEquals(".", lilyValue.getDots());
+    assertTrue(lilyValue.hasSyncopationTilde());
+
+    lilyValue = NoteConvert.stringToLilyValue("beseses~");
+    assertEquals("beseses", lilyValue.getLetters());
+    assertEquals("", lilyValue.getOctaveIndication());
+    assertEquals("", lilyValue.getNumbers());
+    assertEquals("", lilyValue.getDots());
+    assertTrue(lilyValue.hasSyncopationTilde());
   }
 
   @Test
@@ -102,5 +120,13 @@ class NoteConvertTest {
     assertFalse(NoteConvert.isPowerOfTwo(20));
     assertFalse(NoteConvert.isPowerOfTwo(63));
     assertFalse(NoteConvert.isPowerOfTwo(125));
+  }
+
+  @Test
+  void sumNoteLengths() {
+    assertEquals(Arrays.asList(2, 4), NoteConvert.sumNoteLengths(Arrays.asList(4, 8), Arrays.asList(4, 8)));
+    assertEquals(Arrays.asList(2, 16, 32), NoteConvert.sumNoteLengths(Arrays.asList(4, 8, 16), Arrays.asList(8, 32)));
+    assertEquals(Arrays.asList(1, 1), NoteConvert.sumNoteLengths(Arrays.asList(1, 2), Arrays.asList(4, 4)));
+    assertEquals(List.of(1), NoteConvert.sumNoteLengths(Arrays.asList(4, 8, 16), Arrays.asList(2, 16)));
   }
 }
