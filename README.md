@@ -38,7 +38,7 @@ Maven is configured to build one executable JAR file, that has all dependencies 
 
 ... where the jar file should be the complete filename. FILENAME can be `path/to/myFile.ly` and NOTE perhaps `"c'"` or `c\'` for middle c, as long as you escape the apostrophe for bash (or whichever command line you use) to work correctly.
 
-It should then output a file containing your note information, named `path/to/myFile-sc-out/txt`.
+It should then output a file containing your note information, named `path/to/myFile-sc-out.txt`.
 
 Good luck!
 
