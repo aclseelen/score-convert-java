@@ -14,6 +14,7 @@ public class ScoreConvert {
   private TsValue previousTsVal;
   private List<Integer> lastValidNoteLengthReference = new ArrayList<>();
   private final TsValue referenceTsVal = new TsValue(20, 8);
+  private TsValue tempSyncopated = null;
 
   public ScoreConvert() {
     relativeMode = false;
@@ -50,7 +51,6 @@ public class ScoreConvert {
   private String processValues(String[] values) {
 
     StringBuilder result = new StringBuilder();
-    TsValue tempSyncopated = null;
 
     for (String value : values) {
 
