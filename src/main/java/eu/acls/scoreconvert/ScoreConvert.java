@@ -75,8 +75,8 @@ public class ScoreConvert {
         tempSyncopated = null;
         result.append(tsValue);
         result.append(";\n");
-        previousTsVal = tsValue;
       }
+      previousTsVal = tsValue;
     }
     return result.toString();
   }

@@ -127,4 +127,25 @@ class ScoreConvertTest {
 
     assertEquals(expectedTsScore, actualTsScore);
   }
+
+  @Test
+  void lilyScoreToTsScore_syncopeWithOctave() {
+
+    ScoreConvert scoreConvert = new ScoreConvert("c'");
+
+    String lilyScore = "f8 d g,~ |\ng16 r8 r8. |";
+    String expectedTsScore =
+            """
+                    27 11 8;
+                    26 10 8;
+                                       
+                    23 9 8 16;
+                    100 100 8;
+                    100 100 8 16;
+                                 
+                     """;
+    String actualTsScore = scoreConvert.lilyScoreToTsScore(lilyScore);
+
+    assertEquals(expectedTsScore, actualTsScore);
+  }
 }
