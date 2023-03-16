@@ -26,6 +26,34 @@ Bars will be handled as newlines, but currently not checked for validity. Valida
 1. name of the input file
 2. note relative to (in relative mode, e.g. `c'`)
 
+### Output type
+
+When the input is valid, the output should be a text file containing all note values with length added `T s len[...]` , where regarding length 1 is a whole note, 2 a half note, 4 a quarter note, 8 an eighth, and so on...
+
+Syncopation is handled as follows. Lengths are store and when the syncopation is ended, all note lengths are summed
+
+#### Example
+
+Input:
+
+A `*.ly` file with the following content and the relative to `c\'` argument.
+
+```
+bes4. c8~ | c16 d es f g4 |
+```
+ Output:
+
+```
+24 10 4 8;
+
+25 10 8 16;
+26 10 16;
+26 11 16;
+27 11 16;
+28 11 4;
+
+```
+
 ### Build the project
 
 Maven is configured to build one executable JAR file, that has all dependencies included. Use ...
